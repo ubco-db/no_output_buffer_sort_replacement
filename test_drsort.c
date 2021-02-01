@@ -1,9 +1,9 @@
 /******************************************************************************/
 /**
-@file		test_no_output_buffer_sort_replace.c
-@author		Riley Jackson, Ramon Lawrence
-@brief		This file does performance/correctness testing of replacement selection.
-@copyright	Copyright 2020
+@file		test_drsort.c
+@author	    Ramon Lawrence
+@brief		Tests performance/correctness testing of direct read sort.
+@copyright	Copyright 2021
 			The University of British Columbia,
 			IonDB Project Contributors (see AUTHORS.md)
 @par Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "no_output_buffer_sort_replace.h"
+#include "drsort.h"
 #include "../shared/in_memory_sort.h"
 
 #define EXTERNAL_SORT_MAX_RAND 1000000
@@ -195,7 +195,7 @@ int fileRecordIterator(void* state, void* buffer)
     return 1;
 }
 
-void runalltests_no_output_buffer_sort_replace()
+void runalltests_drsort()
 {
     int8_t          numRuns = 5;
     metrics_t       metric[numRuns];
@@ -297,7 +297,7 @@ void runalltests_no_output_buffer_sort_replace()
                 #endif                    
 
                 int8_t runGenOnly = 0;
-                int err = no_output_buffer_sort_replace(&fileRecordIterator, &iteratorState, tuple_buffer, outFilePtr, buffer, buffer_max_pages, &es, &result_file_ptr, &metric[r], merge_sort_int32_comparator, runGenOnly);
+                int err = drsort(&fileRecordIterator, &iteratorState, tuple_buffer, outFilePtr, buffer, buffer_max_pages, &es, &result_file_ptr, &metric[r], merge_sort_int32_comparator, runGenOnly);
 
                 if (8 == err) {
                     printf("Out of memory!\n");
@@ -481,6 +481,6 @@ void runalltests_no_output_buffer_sort_replace()
  */ 
 int main()
 {
-	runalltests_no_output_buffer_sort_replace();
+	runalltests_drsort();
     return 0;
 }

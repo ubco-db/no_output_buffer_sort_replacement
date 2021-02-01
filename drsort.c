@@ -1,9 +1,10 @@
 /******************************************************************************/
 /**
-@file		replacement.c
+@file		drsort.c
 @author		Riley Jackson, Ramon Lawrence
-@brief		File-based replacement selection
-@copyright	Copyright 2019
+@brief		Direct read sort. Uses a heap to store next record in each block.
+            Does not use a buffer per run.
+@copyright	Copyright 2021
 			The University of British Columbia,
 			IonDB Project Contributors (see AUTHORS.md)
 @par Redistribution and use in source and binary forms, with or without
@@ -46,7 +47,7 @@
 #include <time.h>
 #include <math.h>
 
-#include "no_output_buffer_sort_replace.h"
+#include "drsort.h"
 #include "../shared/in_memory_sort.h"
 #include "../shared/no_output_heap.h"
 
@@ -84,7 +85,7 @@ void print_heap(char* buffer,  int32_t heap_start_offset, int heap_size, int lis
 }
 
 /**
-@brief      No output sort with input iterator and supporting variable number of records per block. Uses replacement selection.
+@brief      Direct read sort with input iterator and supporting variable number of records per block. Uses replacement selection.
 @param      iterator
                 Row iterator for reading input rows
 @param      iteratorState
@@ -106,7 +107,7 @@ void print_heap(char* buffer,  int32_t heap_start_offset, int heap_size, int lis
 @param      compareFn
                 Record comparison function for record ordering
 */
-int no_output_buffer_sort_replace(
+int drsort(
     int     (*iterator)(void *state, void* buffer),
     void    *iteratorState,
 	void    *tupleBuffer,
@@ -120,7 +121,7 @@ int no_output_buffer_sort_replace(
     int8_t  runGenOnly
 )
 {
-    printf("No Output Buffer Sort with Replacement Selection for Run Generation\n");
+    printf("Direct Read Sort with Replacement Selection for Run Generation\n");
 	clock_t start = clock();
 
     int16_t     tuplesPerPage = (es->page_size - es->headerSize) / es->record_size;	

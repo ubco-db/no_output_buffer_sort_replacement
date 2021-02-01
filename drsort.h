@@ -1,5 +1,5 @@
-#if !defined(NO_OUTPUT_BUFFER_SORT_REPLACE_H)
-#define NO_OUTPUT_BUFFER_REPLACE_H
+#if !defined(DRSORT_H)
+#define DRSORT_H
 
 #if defined(ARDUINO)
 #include "../../../../serial/serial_c_iface.h"
@@ -23,7 +23,7 @@ extern "C" {
 #endif
 
 /**
-@brief      No output sort with input iterator and supporting variable number of records per block. Uses replacement selection.
+@brief      Direct read sort with input iterator and supporting variable number of records per block. Uses replacement selection.
 @param      iterator
                 Row iterator for reading input rows
 @param      iteratorState
@@ -45,7 +45,7 @@ extern "C" {
 @param      compareFn
                 Record comparison function for record ordering
 */
-int no_output_buffer_sort_replace(
+int drsort(
         int     (*iterator)(void *state, void* buffer),
         void    *iteratorState,
 	void    *tupleBuffer,
